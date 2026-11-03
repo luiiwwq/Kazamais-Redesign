@@ -1,0 +1,6 @@
+{
+  "name": "kazamais", "version": "1.0.0", "private": true,
+  "scripts": { "dev": "next dev", "build": "next build", "start": "next start", "typecheck": "tsc --noEmit", "test:e2e": "playwright test", "assets:audit": "node --experimental-strip-types scripts/audit-assets.ts" },
+  "dependencies": { "next": "16.4.4", "react": "^19.2.0", "react-dom": "^19.2.0", "three": "^0.182.0", "@react-three/fiber": "^9.5.0", "@react-three/drei": "^10.7.0" },
+  "devDependencies": { "typescript": "^5.9.3", "@types/node": "^24.0.0", "@types/react": "^19.2.0", "@types/react-dom": "^19.2.0", "@types/three": "^0.182.0", "@playwright/test": "^1.58.0" }
+}
