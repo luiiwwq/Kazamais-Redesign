@@ -14,12 +14,13 @@ export function materialFamily(product: Product) {
 }
 
 /** Original abstract drawings; no manufacturer's face image or measured relief data. */
-export function drawTile(product: Product, rotated: boolean) {
-  const canvas = document.createElement('canvas'); canvas.width = canvas.height = 512;
+export function drawTile(product: Product, rotated: boolean, image?: HTMLImageElement) {
+  const canvas = document.createElement('canvas'); canvas.width = canvas.height = image ? Math.min(2048, image.naturalWidth) : 512;
   const ctx = canvas.getContext('2d');
   if (!ctx || !product.dimensions) return canvas;
+  ctx.scale(canvas.width / 512, canvas.height / 512);
   const family = materialFamily(product);
-  ctx.fillStyle = family === 'wood' ? '#99704c' : family === 'cement' ? '#aaa69c' : '#eeeae0';
+  ctx.fillStyle = family === 'wood' ? '#99704c' : product.slug === 'savoy' ? '#777c7b' : family === 'cement' ? '#aaa69c' : '#eeeae0';
   ctx.fillRect(0, 0, 512, 512);
   ctx.save();
   if (rotated) { ctx.translate(512, 0); ctx.rotate(Math.PI / 2); }
@@ -50,6 +51,14 @@ export function drawTile(product: Product, rotated: boolean) {
       ctx.fillStyle = gradient; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 62, 256); ctx.lineTo(x, 512); ctx.fill();
     }
   }
+  if (product.slug === 'savoy') {
+    for (let i = 0; i < 7; i++) {
+      ctx.beginPath(); ctx.strokeStyle = '#e6e8e0aa'; ctx.lineWidth = 1 + i % 3;
+      for (let x = 0; x <= 512; x += 8) { const y = i * 83 + Math.sin(x / 78 + i) * 35 - x * .28; if (!x) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+      ctx.stroke();
+    }
+  }
+  if (image) ctx.drawImage(image, 0, 0, 512, 512);
   ctx.restore();
   const { pitchX, pitchY } = layout(product.dimensions, false, rotated);
   // Joint widths are independently scaled on each UV axis, including rectangular planks.

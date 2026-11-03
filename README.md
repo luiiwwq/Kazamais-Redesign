@@ -28,9 +28,9 @@ Versões instaladas no lockfile: Next 16.4.4, React/React DOM 19.3.1, Three 0.18
 - `/`: direção editorial arquitetônica, fotos locais, acesso ao simulador pelo material do hero, índice de aparências com filtros verificáveis, percurso para profissionais e diretório das quatro unidades.
 - `/revestimentos`: busca por nome/ref (sem distinção de acentos), filtros por marca/aparência/acabamento/aplicação confirmada, parâmetros URL, ordenação, contagem, estado vazio e comparação de até três referências.
 - `/revestimentos/[slug]`: nove fichas estáticas, metadata individual, galeria e zoom em dialog nativo, notas de conflito, fontes, embalagem a confirmar e relacionados.
-- `/ambientes`, `/profissionais`, `/lojas`: inspiração, orientação de especificação e contatos publicados. Ligações/mapas só abrem por ação do visitante.
+- `/ambientes`, `/profissionais`, `/lojas`: inspiração, orientação de especificação e contatos publicados. Quatro previews Google Maps lazy, sem chave, com ampliação em dialog, Escape, retorno de foco e link externo alternativo. Previews consultam serviço externo quando se aproximam da viewport.
 - `/orcamento`: seleção local, áreas opcionais, notas por item, unidade e resumo copiável. Sem envio ao servidor. Falha do clipboard oferece cópia manual.
-- `/simulador`: estudo visual 3D sob demanda, com materiais e orientações independentes por superfície, presets de câmera, luz, reset e fallback; orçamento continua utilizável sem WebGL.
+- `/simulador`: nove materiais selecionáveis em expositor 3D (incluindo deep links sem aplicação confirmada), seis faces locais auditadas e três padrões procedurais. Aplicações confirmadas continuam separadas por superfície, com orientação independente, câmera, luz, reset e fallback; orçamento continua utilizável sem WebGL.
 - `sitemap.xml`, `robots.txt`, 404 e boundary de erro. Redirecionamentos locais de `/blog`, `/blog/produto/:slug`, `/blog/product/:slug`, `/produto/:slug` e `/produtos`.
 
 Filtros não inferem propriedades de fotografias. `surfaces: []` significa não confirmado, e não proibido. Comparação e seleção de orçamento são estados independentes. Campos em conflito são explicitados na ficha, sem estimar caixas, espessuras ou rendimento.
@@ -60,13 +60,15 @@ Itens, áreas e notas são sincronizados entre abas da mesma origem por eventos 
 - `scripts/audit-assets.ts`: reproduz a comparação binária com o acervo, baixa apenas imagens necessárias e gera o mapa. `npm run assets:audit` requer rede e pode atualizar exclusivamente mapa, relatório e cópias auditadas.
 - Assets originais preservados. Logo oficial e fachada importados do acervo.
 
-As novas cópias não coincidiram byte a byte com os originais. A escolha de manter versões separadas evita supor que nomes numéricos identifiquem a mesma referência. Correspondência binária/proveniência não certificam cor, adequação técnica nem direitos de uso. Autorização comercial de imagens e marca permanece pendente.
+As novas cópias não coincidiram byte a byte com os originais. A escolha de manter versões separadas evita supor que nomes numéricos identifiquem a mesma referência. Correspondência binária/proveniência não certificam cor, adequação técnica nem direitos de uso. O usuário autorizou o uso das informações e assets Kazamais neste projeto. Trata-se de autorização relatada, não de licença independente concedida por fabricantes/fotógrafos.
 
 ## Design e acessibilidade
 
 `DESIGN.md` registra as escolhas; tokens executáveis em `src/app/globals.css`. Georgia editorial + Trebuchet MS humanista, com fallbacks locais. Sem dependência de Google Fonts. Teclado, foco visível, skip-link, menu mobile, Escape e restauração de foco nos dialogs; reduced-motion remove animações. Sem biblioteca de ícones: ações têm rótulos textuais.
 
 ## Testes
+
+Atualização de interface: veja `docs/UPDATE-QA.md` para evidências atuais, imagens inspecionadas e limites. Registros anteriores abaixo permanecem históricos.
 
 ```sh
 npx playwright install chromium
@@ -82,7 +84,7 @@ O smoke do simulador requer `npm run build` antes e a porta **3217 livre**; ele 
 
 1. Manter build, typecheck, testes multiaba e smoke WebGL/fallback aprovados após qualquer nova alteração.
 2. Definir `NEXT_PUBLIC_SITE_URL` para o domínio real. Sem configuração, usa localhost, sem inventar domínio de produção.
-3. Obter autorização de imagens/marca e validar informações comerciais e técnicas.
+3. Preservar o escopo da autorização Kazamais relatada pelo usuário, verificar direitos independentes de terceiros quando necessários e validar informações comerciais e técnicas.
 4. Definir `SITE_INDEXABLE=true` somente após aprovação de publicação. Padrão: noindex e robots bloqueado. Orçamento permanece noindex.
 5. Executar testes em produção, Safari/Firefox, dispositivos reais e auditorias de acessibilidade/desempenho proporcionais.
 

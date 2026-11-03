@@ -37,7 +37,7 @@ Conforme docs/IMPLEMENTATION-QA.md:17–26: suíte completa 9/9 em 32,9 s; typec
 - Unidade de preferência não participa da sincronização multiaba dos itens. Isso está explicitado na documentação atual.
 - O teste de armazenamento indisponível integra os 9/9 reportados, mas não foi reexecutado neste recorte. A manutenção do modo de sessão foi inspecionada no código, não revalidada aqui por novo teste.
 - Sem nova revisão visual completa, screenshots, auditoria de acessibilidade, Safari/Firefox, dispositivo físico, benchmark GPU/memória ou instrumentação de visibilidade/DPR. A revisão visual e de teclado inicial permanece evidência histórica, não nova validação das correções.
-- Nenhuma auditoria integral de segurança, dependências ou conformidade; permanecem gates comerciais de direitos de imagem, domínio/indexação e validação técnica antes de publicação. Sem deploy.
+- Nenhuma auditoria integral de segurança, dependências ou conformidade; permanecem domínio/indexação, validação técnica e eventuais direitos independentes de terceiros antes de publicação. Autorização de informações/assets Kazamais posteriormente relatada pelo usuário: ver DATA-AUDIT.md. Sem deploy.
 - Sem baseline Git para atribuição temporal. Referências de linhas e caminhos de artefatos no histórico correspondem à revisão inicial; artefatos em test-results podem ter sido substituídos por execuções posteriores e sua permanência não foi verificada nesta rodada.
 
 **Escrita desta revalidação:** somente docs/FINAL-QA.md e saída de testes no diretório temporário autorizado. Nenhum código-fonte, teste, dependência ou outro documento alterado pelo revisor. Nenhum subagente utilizado.

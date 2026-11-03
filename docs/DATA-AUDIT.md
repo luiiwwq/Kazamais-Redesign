@@ -46,7 +46,7 @@ Quatro unidades publicadas no rodapé das dez páginas, exportadas com endereço
 
 ## Imagens e direitos
 
-URLs reais extraídas das galerias das fichas, sem placeholders ou imagens geradas. `kind` distingue face e ambiente conforme identificação editorial dos arquivos; não constitui ensaio técnico ou comprovação de aplicação. Imagens com identidade conflitante foram excluídas; o ambiente oficial Classic inclui também AR72080, explicitado no alt. Nenhum direito de uso foi concedido por esta auditoria: **autorização de Kazamais/fabricantes/fotógrafos pendente antes de publicação comercial**, inclusive para cópias locais preexistentes. Acesso público não é licença. Nenhum asset existente foi alterado. Não foi executada checagem HTTP individual de todos os binários nem comparação visual integral; URLs foram verificadas como links presentes nas páginas consultadas.
+URLs reais extraídas das galerias das fichas, sem placeholders ou imagens geradas. `kind` distingue face e ambiente conforme identificação editorial dos arquivos; não constitui ensaio técnico ou comprovação de aplicação. Imagens com identidade conflitante foram excluídas; o ambiente oficial Classic inclui também AR72080, explicitado no alt. **Atualização: o usuário autorizou expressamente o uso das informações e assets Kazamais neste projeto.** Substitui a pendência anterior de autorização Kazamais. Não comprova nem concede licença independente de fabricantes/fotógrafos. Acesso público não é licença. Nenhum asset existente foi alterado nesta auditoria original; URLs foram verificadas como links presentes nas páginas consultadas.
 
 ## Verificações e limites
 
@@ -102,7 +102,7 @@ Sessão/token público do próprio catálogo usados em memória, sem credenciais
 - Base agora oferece **dois produtos de piso e três de parede**, sem criar permissões para atingir uma quantidade artificial.
 - `surfaces` permite seleção por superfície, mas não modela todos os ambientes, tráfego, inclinação ou instalação; restrições permanecem em notes. Simulação visual não é especificação técnica.
 - Somente os dois arquivos autorizados foram alterados. Não foi alterada nem testada a interface de alternância. Madero/Monterrey ainda possuem imagens `room`; se o renderizador exigir textura `tile`, a compatibilidade de dados sozinha não resolve essa dependência. Não reclassificar foto de ambiente como face.
-- Direitos de imagem permanecem pendentes. Não foram baixados binários nem alteradas imagens nesta rodada.
+- Registro histórico: não foram baixados binários nem alteradas imagens naquela rodada. A autorização Kazamais foi posteriormente relatada pelo usuário, conforme seção de direitos acima; licenças independentes de terceiros não foram inventadas.
 
 ### Verificações executadas nesta rodada
 

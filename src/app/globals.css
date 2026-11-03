@@ -6,6 +6,25 @@
 @media(max-width:520px){.filters{grid-template-columns:1fr 1fr;padding:18px;gap:12px}.filters .search-label{grid-column:1/-1}.product-grid{grid-template-columns:1fr}.featured-grid{display:block}.featured-grid>article:nth-child(2){margin:35px 0 35px 15%}.featured-grid>article:last-child{width:100%}.product-image img{aspect-ratio:1/1.1}.results-bar{gap:10px 20px}.results-bar label{width:100%;margin:0;justify-content:space-between}.hero-photo>img{height:350px}.gallery-main>img{height:380px}.store-grid{grid-template-columns:1fr}.quote-summary,.technical-notes{padding:24px}.row{flex-direction:column;gap:12px}.compare-bar{padding:16px;bottom:8px}.compare-bar button{font-size:13px;flex:1}.environment>img{height:340px}.product-meta{font-size:13px}footer nav{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}button:active,.button:active,.product-card a:hover img{transform:none}}
 
+:focus:not(:focus-visible){outline:none}
+.skip-link:not(:focus-visible){clip-path:inset(50%);pointer-events:none}
+:focus-visible{outline:2px solid var(--mineral);outline-offset:4px}
+.route-enter{animation:route-enter 220ms var(--ease)}
+@keyframes route-enter{from{opacity:.7;transform:translateY(5px)}to{opacity:1;transform:none}}
+dialog[open],.navigation.open{animation:route-enter 180ms var(--ease)}
+a{transition:color 140ms ease}
+.store-map{margin-top:24px}
+.map-preview{height:250px;position:relative;background:var(--sand)}
+.store-map iframe{width:100%;height:100%;border:0;display:block}
+.map-open{position:absolute;inset:0;width:100%;height:100%;border:0;align-items:flex-end;justify-content:flex-end;padding:16px;background:transparent!important;color:var(--paper)!important}
+.map-open span{background:var(--mineral);padding:10px 16px}
+.map-open:active{transform:none}
+.map-dialog{width:min(1000px,94vw);max-height:92dvh;padding:24px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.map-dialog::backdrop{background:#20282099}
+.map-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.map-dialog-heading h2{font-size:28px}
+.map-dialog iframe{height:55dvh;min-height:240px}
+@media(max-width:520px){.map-dialog{padding:16px}.map-dialog-heading{align-items:start}.map-dialog-heading h2{font-size:23px}}
 /* Home: a typographic index, an ordered process and a local store directory.
    These remain distinct editorial structures, not additional card grids. */
 .hero-actions{display:flex;flex-direction:column;align-items:flex-start;gap:8px}

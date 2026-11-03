@@ -1,5 +1,16 @@
 # Simulador de materiais
 
+## Atualização: nove materiais e faces locais
+
+Este bloco substitui os detalhes antigos conflitantes abaixo (mantidos como histórico de validação).
+
+- Todos os nove produtos podem ser selecionados no controle **Expositor**. Troca realmente a face/padrão visível no Canvas; não atribui piso/parede. Deep links sem aplicação confirmada abrem nesse modo. Formato proporcional, escala de apresentação ajustada, sem alegação de espessura real. Mobiliário é ocultado no modo expositor para não intersectar o pedestal.
+- Aplicações confirmadas continuam sendo dois pisos/três paredes, sem alteração de contratos técnicos. Slug inexistente gera aviso. Reset também oculta expositor. Orçamento e ficha acompanham o produto efetivamente selecionado.
+- Seis faces do mapa auditado: Monte, Artsy, Santa Diamond, Minimalismo, Thor e Classic. Importadas localmente, nunca imagens `room`; canvas até 2048² limitado à resolução original. Santa Diamond tem apenas 450²: não há detalhe de alta resolução inventado. Faces incluem iluminação fotografada, não são PBR calibrado; relevo não é geometria medida.
+- Madero, Monterrey e Savoy não têm face isolada identificada no contrato: padrões originais procedurais de 512², distintos por aparência. Foto ambientada é referência HTML, nunca textura. Falha de carregamento de face mantém padrão procedural. Color maps sRGB, anisotropia limitada à GPU e a 8, repetição/orientação por instância, descarte no cleanup e proteção contra callback após unmount.
+- Ambiente procedural local de iluminação capturado uma vez em 64², luz direcional/sombras existentes, mobiliário com cantos arredondados, almofadas com sheen, pés e elemento vegetal. Sem HDR remoto, física, segundo renderer ou pós-processamento. Não constitui fotorrealismo/fotometria. Mantém demand loop e pausas; não promete FPS ou economia medida.
+- Resultados atuais em UPDATE-QA.md. Registros abaixo são da implementação anterior.
+
 ## Escopo e entrada
 
 Implementação isolada em `src/components/simulator/`; export default em `Simulator.tsx`. Reutiliza a página `/simulador`, os dados e `useSelection`, sem alterar contratos, dependências ou estilos globais.

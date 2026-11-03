@@ -1,6 +1,6 @@
 # Mapa de imagens locais
 
-URLs do contrato comparadas por SHA-256 com assets existentes. Cópias novas apenas quando não há correspondência binária. Direitos pendentes conforme DATA-AUDIT.md.
+URLs do contrato comparadas por SHA-256 com assets existentes. Cópias novas apenas quando não há correspondência binária. Uso das informações e assets Kazamais autorizado pelo usuário neste projeto; não implica licença independente de terceiros. Ver DATA-AUDIT.md.
 
 - monte-saint-michez-fendi: https://kazamais.com.br/blog/wp-content/uploads/2022/06/73003-Monte-Saint-Michez-Fendi-F1-1.jpg → src\assets\images\audited\monte-saint-michez-fendi-0.jpg (cópia auditada; SHA-256 396b2206da78c8295be8afdb06d4571f21093b43048a335e304a68b095a3abaa)
 - monte-saint-michez-fendi: https://kazamais.com.br/blog/wp-content/uploads/2022/06/Monte-Saint-Michez-Fendi-73003.jpg → src\assets\images\audited\monte-saint-michez-fendi-1.jpg (cópia auditada; SHA-256 2d49ebe55c5b11a670d0dddfbbea2883ca53dd31f7c1c0f80633c80ee213d2bd)

@@ -31,7 +31,7 @@ Madero e Monterrey têm piso/parede; Classic somente parede: **2 pisos / 3 pared
 
 Web Locks serializa mutações dos itens entre abas da mesma origem. Patches de campos diferentes são preservados; no mesmo campo, vence a última gravação na ordem do lock. Remoção prevalece sobre edição atrasada, mas uma ação explícita de selecionar novamente pode adicionar o item. Sem Web Locks, rebase antes da gravação reduz conflitos, porém localStorage não fornece transação atômica entre abas; esse fallback não foi testado em browsers sem a API. Armazenamento bloqueado mantém modo de sessão com aviso. A preferência de unidade não foi convertida em estado sincronizado multiaba.
 
-Não há bloqueio de build/integração pendente nesta revalidação. Permanecem gates comerciais de direitos de imagem, domínio/indexação e validação técnica; não houve deploy. Safari/Firefox, dispositivos físicos, leitor de tela, axe/Lighthouse, benchmark GPU/memória e conformidade integral não foram verificados. Nenhuma nova revisão visual completa foi alegada por estas correções funcionais.
+Não há bloqueio de build/integração pendente nesta revalidação histórica. Permanecem domínio/indexação, validação técnica e eventuais direitos independentes de terceiros; autorização Kazamais posteriormente relatada pelo usuário em DATA-AUDIT.md. Não houve deploy. Safari/Firefox, dispositivos físicos, leitor de tela, axe/Lighthouse, benchmark GPU/memória e conformidade integral não foram verificados. Nenhuma nova revisão visual completa foi alegada por estas correções funcionais.
 
 ## Histórico: execução pré-integração
 

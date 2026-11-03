@@ -47,6 +47,22 @@ const base = 'http://localhost:3217';
       const capture = async () => { await canvas.scrollIntoViewIfNeeded(); await page.waitForTimeout(350); return canvas.screenshot(); };
       const different = (a, b, label) => assert(!a.equals(b), `Rendered pixels unchanged: ${label}`);
       let previous = await capture();
+      const samples = page.getByLabel('Expositor · todos os nove materiais');
+      await expect(samples.locator('option')).toHaveCount(10);
+      const slugs = await samples.locator('option').evaluateAll(options => options.map(o => o.value).filter(Boolean));
+      const captures = [];
+      for (const slug of slugs) {
+        await samples.selectOption(slug);
+        await page.waitForTimeout(250);
+        const next = await capture();
+        for (const prior of captures) different(prior, next, `unique sample ${slug}`);
+        captures.push(next);
+        await canvas.screenshot({ path: `test-results/sample-${viewport.width}-${slug}.png` });
+        await expect(page.getByText('Amostra / expositor 3D.', { exact: true })).toBeVisible();
+      }
+      await samples.selectOption('');
+      await page.screenshot({ path: `test-results/room-${viewport.width}.png`, fullPage: true });
+      previous = await capture();
       for (const slug of [wood, cement, relief]) {
         await material.selectOption(slug);
         const next = await capture(); different(previous, next, `wall ${slug}`); previous = next;

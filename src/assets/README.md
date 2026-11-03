@@ -9,4 +9,4 @@ As imagens estão separadas por finalidade para serem copiadas para um projeto R
 
 Os arquivos foram baixados mantendo uma cópia local para evitar que o projeto dependa dos links externos do WordPress.
 
-Verifique autorização da empresa antes de publicar ou utilizar comercialmente logos, fotografias e textos.
+O usuário autorizou o uso das informações e assets Kazamais neste projeto. Isso não concede nem comprova licenças independentes de fabricantes/fotógrafos; verifique direitos de terceiros quando necessários antes da publicação.

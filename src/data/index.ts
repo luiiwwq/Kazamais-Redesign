@@ -30,7 +30,7 @@ const root = 'https://kazamais.com.br/blog/';
 const upload = `${root}wp-content/uploads/2022/06/`;
 const source = (slug: string): string => `${root}produto/${slug}/`;
 const image = (file: string, alt: string, kind: 'room' | 'tile'): Product['images'][number] => ({ src: upload + file, alt, kind });
-const rights = 'Direitos de reprodução das imagens pendentes de autorização; URL pública não constitui licença.';
+const rights = 'Uso das informações e assets Kazamais autorizado pelo usuário para este projeto. Essa autorização relatada não constitui licença independente de fabricantes ou fotógrafos; URL pública não é licença.';
 
 export const products: Product[] = [
   {
