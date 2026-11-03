@@ -6,9 +6,29 @@
 @media(max-width:520px){.filters{grid-template-columns:1fr 1fr;padding:18px;gap:12px}.filters .search-label{grid-column:1/-1}.product-grid{grid-template-columns:1fr}.featured-grid{display:block}.featured-grid>article:nth-child(2){margin:35px 0 35px 15%}.featured-grid>article:last-child{width:100%}.product-image img{aspect-ratio:1/1.1}.results-bar{gap:10px 20px}.results-bar label{width:100%;margin:0;justify-content:space-between}.hero-photo>img{height:350px}.gallery-main>img{height:380px}.store-grid{grid-template-columns:1fr}.quote-summary,.technical-notes{padding:24px}.row{flex-direction:column;gap:12px}.compare-bar{padding:16px;bottom:8px}.compare-bar button{font-size:13px;flex:1}.environment>img{height:340px}.product-meta{font-size:13px}footer nav{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}button:active,.button:active,.product-card a:hover img{transform:none}}
 
-:focus:not(:focus-visible){outline:none}
+:focus:not(:focus-visible){outline:none;box-shadow:none}
+/* Stable borders across pointer states; keyboard focus remains independent. */
+button,.button,.selection-link{border-color:var(--line);box-shadow:none}
+button:hover,.button:hover,button:active,.button:active{border-color:var(--mineral);background:var(--mineral);color:var(--paper);box-shadow:none}
+a:hover,a:active,input:hover,select:hover,textarea:hover{box-shadow:none}
+input:focus,select:focus,textarea:focus{border-color:var(--mineral);box-shadow:none}
+:where(a,button,input,select,textarea,summary):focus-visible{outline:2px solid var(--mineral);outline-offset:-2px;box-shadow:none}
+.published-table{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;margin-block:24px;font-variant-numeric:tabular-nums}
+.published-table caption{text-align:left;font-family:Georgia,serif;font-size:26px;margin-bottom:12px}
+.published-table th,.published-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.published-table th{width:50%;font-weight:normal;color:var(--muted)}
+/* Scoped states must not reintroduce the graphite selection frame. */
+.thumbnails button[aria-pressed="true"]{border-color:var(--mineral);background:var(--sand)}
+.thumbnails button:hover,.thumbnails button:active{border-color:var(--mineral);background:var(--sand)}
+.gallery-main:active{background:var(--sand);transform:none}
+button:disabled:hover,button:disabled:active{background:transparent;color:var(--muted);border-color:var(--line);transform:none;box-shadow:none}
+input:hover,select:hover,textarea:hover{border-color:var(--mineral)}
+input,select,textarea,button,.button{transition:border-color 140ms ease,background-color 140ms ease,color 140ms ease}
+footer :focus-visible,.compare-bar :focus-visible{outline-color:var(--paper)}
+html[data-input-modality="pointer"] :is(a,button,input,select,textarea,summary):focus{outline:none;box-shadow:none}
+@media(prefers-reduced-motion:reduce){input,select,textarea,button,.button{transition:none}}
 .skip-link:not(:focus-visible){clip-path:inset(50%);pointer-events:none}
-:focus-visible{outline:2px solid var(--mineral);outline-offset:4px}
+:focus-visible{outline:2px solid var(--mineral);outline-offset:-2px}
 .route-enter{animation:route-enter 220ms var(--ease)}
 @keyframes route-enter{from{opacity:.7;transform:translateY(5px)}to{opacity:1;transform:none}}
 dialog[open],.navigation.open{animation:route-enter 180ms var(--ease)}

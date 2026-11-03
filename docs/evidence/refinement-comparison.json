@@ -1,0 +1,62 @@
+[
+  {
+    "viewport": 1440,
+    "slug": "madero-jatoba-externo",
+    "meanAbsoluteRgbDifference": {
+      "wall": 14.26,
+      "floor": 25.02
+    },
+    "note": "Fixed normalized crops, not semantic segmentation; difference is not a quality score.",
+    "output": "docs/evidence/compare-1440-madero-jatoba-externo.png"
+  },
+  {
+    "viewport": 1440,
+    "slug": "monterrey-cement",
+    "meanAbsoluteRgbDifference": {
+      "wall": 30.06,
+      "floor": 40.72
+    },
+    "note": "Fixed normalized crops, not semantic segmentation; difference is not a quality score.",
+    "output": "docs/evidence/compare-1440-monterrey-cement.png"
+  },
+  {
+    "viewport": 1440,
+    "slug": "savoy",
+    "meanAbsoluteRgbDifference": {
+      "wall": 49.43,
+      "floor": 29.25
+    },
+    "note": "Fixed normalized crops, not semantic segmentation; difference is not a quality score.",
+    "output": "docs/evidence/compare-1440-savoy.png"
+  },
+  {
+    "viewport": 390,
+    "slug": "madero-jatoba-externo",
+    "meanAbsoluteRgbDifference": {
+      "wall": 13.99,
+      "floor": 27.16
+    },
+    "note": "Fixed normalized crops, not semantic segmentation; difference is not a quality score.",
+    "output": "docs/evidence/compare-390-madero-jatoba-externo.png"
+  },
+  {
+    "viewport": 390,
+    "slug": "monterrey-cement",
+    "meanAbsoluteRgbDifference": {
+      "wall": 31.11,
+      "floor": 44.92
+    },
+    "note": "Fixed normalized crops, not semantic segmentation; difference is not a quality score.",
+    "output": "docs/evidence/compare-390-monterrey-cement.png"
+  },
+  {
+    "viewport": 390,
+    "slug": "savoy",
+    "meanAbsoluteRgbDifference": {
+      "wall": 49.52,
+      "floor": 31.01
+    },
+    "note": "Fixed normalized crops, not semantic segmentation; difference is not a quality score.",
+    "output": "docs/evidence/compare-390-savoy.png"
+  }
+]

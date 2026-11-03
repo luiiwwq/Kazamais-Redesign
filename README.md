@@ -27,13 +27,15 @@ Versões instaladas no lockfile: Next 16.4.4, React/React DOM 19.3.1, Three 0.18
 
 - `/`: direção editorial arquitetônica, fotos locais, acesso ao simulador pelo material do hero, índice de aparências com filtros verificáveis, percurso para profissionais e diretório das quatro unidades.
 - `/revestimentos`: busca por nome/ref (sem distinção de acentos), filtros por marca/aparência/acabamento/aplicação confirmada, parâmetros URL, ordenação, contagem, estado vazio e comparação de até três referências.
-- `/revestimentos/[slug]`: nove fichas estáticas, metadata individual, galeria e zoom em dialog nativo, notas de conflito, fontes, embalagem a confirmar e relacionados.
+- `/revestimentos/[slug]`: nove fichas estáticas, metadata individual, galeria e zoom em dialog nativo, tabelas técnicas e embalagens publicadas pela Kazamais, notas de conflito, fontes e relacionados. Classic não tem tabela de embalagem publicada.
 - `/ambientes`, `/profissionais`, `/lojas`: inspiração, orientação de especificação e contatos publicados. Quatro previews Google Maps lazy, sem chave, com ampliação em dialog, Escape, retorno de foco e link externo alternativo. Previews consultam serviço externo quando se aproximam da viewport.
 - `/orcamento`: seleção local, áreas opcionais, notas por item, unidade e resumo copiável. Sem envio ao servidor. Falha do clipboard oferece cópia manual.
-- `/simulador`: nove materiais selecionáveis em expositor 3D (incluindo deep links sem aplicação confirmada), seis faces locais auditadas e três padrões procedurais. Aplicações confirmadas continuam separadas por superfície, com orientação independente, câmera, luz, reset e fallback; orçamento continua utilizável sem WebGL.
+- `/simulador`: todos os nove materiais aplicáveis diretamente ao piso e à parede, com seletor único de material por superfície. Sem expositor. Faces locais nos nove: Madero usa 16 faces oficiais, Monterrey 3 únicas (4 arquivos publicados, um duplicado) e Savoy 8. Atlases limitados, bump/rugosidade aproximados, luz recalibrada e contato suave estático. Orientação e materiais independentes, câmera, luz, reset e fallback procedural identificado. Uso não verificado tem aviso contextual; Classic no piso é estudo visual sem indicação técnica. Orçamento utilizável sem WebGL.
 - `sitemap.xml`, `robots.txt`, 404 e boundary de erro. Redirecionamentos locais de `/blog`, `/blog/produto/:slug`, `/blog/product/:slug`, `/produto/:slug` e `/produtos`.
 
 Filtros não inferem propriedades de fotografias. `surfaces: []` significa não confirmado, e não proibido. Comparação e seleção de orçamento são estados independentes. Campos em conflito são explicitados na ficha, sem estimar caixas, espessuras ou rendimento.
+
+`technicalDetails`, `packagingDetails` e `fieldNotes` preservam a publicação Kazamais em `src/data/published.ts`, integrada ao contrato Product. As tabelas não são descartadas por ausência de reconfirmação oficial. O simulador não usa `surfaces` como barreira à experimentação. Pare o dev antes de executar build; não compartilhe `.next` entre build e dev ativos.
 
 A base atual confirma **dois pisos e três paredes**: Madero Jatobá e Monterrey Cement têm piso/parede; Classic White Deco tem somente parede. Opções de aplicação do catálogo derivam dos dados, e a comparação mostra todas as superfícies de cada produto. As restrições das fichas continuam válidas. Exemplos locais: `/revestimentos?aplicacao=floor`, `/revestimentos?aplicacao=wall` e `/simulador?produto=madero-jatoba-externo`.
 
@@ -57,6 +59,8 @@ Itens, áreas e notas são sincronizados entre abas da mesma origem por eventos 
 - `docs/DATA-AUDIT.md`: histórico de fontes, validações e decisões que fundamentam a base atual, incluindo as confirmações oficiais incorporadas durante o projeto. Consulte em conjunto com `src/data/index.ts`.
 - `src/lib/product-images.ts`: imports estáticos de 13 imagens associadas às URLs auditadas.
 - `docs/IMAGE-MAP.md`: proveniência, arquivo local e SHA-256.
+- `docs/evidence/official-faces.json`: proveniência e hashes dos ZIPs oficiais, dimensões e cópias locais adicionais do simulador. `scripts/official-faces.cjs` audita; `--write` recria somente faces locais, manifest e contact sheets. Fontes limitadas a 510–600 px no maior eixo, não anunciadas como alta resolução.
+- `docs/evidence/compare-*.png`: antes à esquerda/depois à direita, mesmo enquadramento desktop/mobile. Scripts `capture-refinement.cjs` e `compare-refinement.cjs` reproduzem capturas e comparação; não sobrescrever o baseline histórico sem intenção explícita.
 - `scripts/audit-assets.ts`: reproduz a comparação binária com o acervo, baixa apenas imagens necessárias e gera o mapa. `npm run assets:audit` requer rede e pode atualizar exclusivamente mapa, relatório e cópias auditadas.
 - Assets originais preservados. Logo oficial e fachada importados do acervo.
 
@@ -69,6 +73,8 @@ As novas cópias não coincidiram byte a byte com os originais. A escolha de man
 ## Testes
 
 Atualização de interface: veja `docs/UPDATE-QA.md` para evidências atuais, imagens inspecionadas e limites. Registros anteriores abaixo permanecem históricos.
+
+Refinamento final: **14/14 E2E aprovados**, typecheck/build aprovados e smoke 3D aprovado nos três tamanhos, `errors=[]`. Inclui os nove deep links, falha de uma face de atlas oficial, controles nativos, thumbnails selecionadas, dialogs e menu mobile. Input modality remove outline no mouse (inclusive autofocus de dialog e select nativo) sem blur; teclado restaura foco-visible. Dev foi parado antes do build.
 
 ```sh
 npx playwright install chromium

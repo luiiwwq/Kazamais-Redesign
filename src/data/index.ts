@@ -1,5 +1,9 @@
+import { published } from './published';
 /** Fontes e decisões por campo: docs/DATA-AUDIT.md. Não é ficha de instalação. */
 export interface Product {
+  technicalDetails?: { label: string; value: string }[];
+  packagingDetails?: { label: string; value: string }[];
+  fieldNotes?: string[];
   slug: string;
   name: string;
   brand?: string;
@@ -94,6 +98,8 @@ export const products: Product[] = [
     notes: [rights, 'Validação oficial: https://viarosa.com.br/produtos/classic-white-deco/ — AR72056, 72 × 72 cm, aplicação Parede, LF paredes internas, externas e fachadas.', 'Original: home 72 × 72 versus ficha 75 × 75; adotado 72 × 72 oficial. Foto principal AR72000 da Kazamais excluída por outra referência.', 'Espessura Kazamais 10 mm versus oficial 11 mm; não exposta no contrato.'], surfaces: ['wall'], color: '',
   },
 ];
+
+for (const product of products) Object.assign(product, published[product.slug]);
 
 export const stores: Store[] = [
   { name: 'Unidade Paulínia / SP', address: 'Av José Paulino, 4640, Pq. Brasil 500.', phone: '(19) 3874.1701', hours: 'Segunda a sexta-feira 9h às 18h; sábado 9h às 13h', source: root },

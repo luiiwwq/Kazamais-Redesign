@@ -38,8 +38,8 @@ const base = 'http://localhost:3217';
       await page.evaluate(() => { window.__simulatorIdentity = 'same-document'; });
       let navigations = 0;
       page.on('framenavigated', frame => { if (frame === page.mainFrame()) navigations++; });
-      const application = page.getByLabel('Aplicação'), material = page.getByLabel('Material confirmado');
-      await expect(material.locator('option')).toHaveCount(4);
+       const application = page.getByLabel('Aplicação'), material = page.getByLabel('Material', { exact: true });
+       await expect(material.locator('option')).toHaveCount(10);
       await page.getByRole('button', { name: 'Selecionar para orçamento', exact: true }).click();
       await page.getByRole('button', { name: 'Iniciar visualização 3D' }).click();
       const canvas = page.locator('canvas'); await canvas.waitFor();
@@ -47,20 +47,19 @@ const base = 'http://localhost:3217';
       const capture = async () => { await canvas.scrollIntoViewIfNeeded(); await page.waitForTimeout(350); return canvas.screenshot(); };
       const different = (a, b, label) => assert(!a.equals(b), `Rendered pixels unchanged: ${label}`);
       let previous = await capture();
-      const samples = page.getByLabel('Expositor · todos os nove materiais');
-      await expect(samples.locator('option')).toHaveCount(10);
-      const slugs = await samples.locator('option').evaluateAll(options => options.map(o => o.value).filter(Boolean));
-      const captures = [];
-      for (const slug of slugs) {
-        await samples.selectOption(slug);
-        await page.waitForTimeout(250);
-        const next = await capture();
-        for (const prior of captures) different(prior, next, `unique sample ${slug}`);
-        captures.push(next);
-        await canvas.screenshot({ path: `test-results/sample-${viewport.width}-${slug}.png` });
-        await expect(page.getByText('Amostra / expositor 3D.', { exact: true })).toBeVisible();
-      }
-      await samples.selectOption('');
+       const slugs = await material.locator('option').evaluateAll(options => options.map(o => o.value).filter(Boolean));
+       for (const surface of ['floor', 'wall']) {
+         await application.selectOption(surface);
+         const captures = [];
+         for (const slug of slugs) {
+           await material.selectOption(slug);
+           await expect(page.locator(`[data-texture-slot="${surface}"]`)).toContainText(/carregada e exibida|procedural ilustrativo em uso/);
+           const next = await capture();
+           for (const prior of captures) different(prior, next, `unique ${surface} ${slug}`);
+           captures.push(next);
+           await canvas.screenshot({ path: `test-results/${surface}-${viewport.width}-${slug}.png` });
+         }
+       }
       await page.screenshot({ path: `test-results/room-${viewport.width}.png`, fullPage: true });
       previous = await capture();
       for (const slug of [wood, cement, relief]) {
@@ -68,7 +67,7 @@ const base = 'http://localhost:3217';
         const next = await capture(); different(previous, next, `wall ${slug}`); previous = next;
       }
       await page.getByRole('button', { name: 'Orientação: 0°' }).click();
-      await application.selectOption('floor'); await expect(material.locator('option')).toHaveCount(3);
+       await application.selectOption('floor'); await expect(material.locator('option')).toHaveCount(10);
       for (const slug of [wood, cement, wood]) {
         await material.selectOption(slug);
         const next = await capture(); different(previous, next, `floor ${slug}`); previous = next;
@@ -126,7 +125,7 @@ const base = 'http://localhost:3217';
     await unavailable.getByRole('button', { name: 'Iniciar visualização 3D' }).click();
     await unavailable.getByText('Visualização 3D indisponível.', { exact: true }).waitFor();
     assert.equal(await unavailable.locator('canvas').count(), 0);
-    await unavailable.getByLabel('Material confirmado').selectOption(cement);
+     await unavailable.getByLabel('Material', { exact: true }).selectOption(cement);
     await unavailable.getByRole('button', { name: 'Selecionar para orçamento', exact: true }).click();
     await expect(unavailable.getByRole('button', { name: 'Remover do orçamento', exact: true })).toBeVisible();
     await unavailable.getByRole('button', { name: 'Tentar 3D novamente' }).click();

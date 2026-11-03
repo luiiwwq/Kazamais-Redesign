@@ -1,4 +1,21 @@
 import { test, expect } from '@playwright/test';
+import { products } from '../src/data';
+
+test('all nine deep links apply to a real surface and official atlas fails safely', async ({ page }) => {
+  for (const p of products) {
+    await page.goto(`/simulador?produto=${p.slug}`);
+    await expect(page.getByLabel('Material', { exact: true })).toHaveValue(p.slug);
+    await expect(page.getByLabel('Aplicação')).toHaveValue(p.surfaces[0] ?? 'wall');
+    await expect(page.getByText('Expositor', { exact: false })).toHaveCount(0);
+  }
+  await page.goto('/simulador?produto=madero-jatoba-externo');
+  await page.route('**/_next/static/media/madero-official-3*.jpg', route => route.abort());
+  await page.getByRole('button', { name: 'Iniciar visualização 3D' }).click();
+  await expect(page.getByTestId('texture-status')).toContainText('Fallback procedural ilustrativo em uso');
+  await page.getByLabel('Material', { exact: true }).selectOption('monterrey-cement');
+  await expect(page.getByTestId('texture-status')).toContainText('Monterrey Cement: Face local auditada carregada e exibida.');
+  await expect(page.locator('canvas')).toBeVisible();
+});
 
 test('texture failure reports procedural fallback and ignores cancelled requests', async ({ page }) => {
   const errors: string[] = [];
@@ -31,7 +48,7 @@ test('texture failure reports procedural fallback and ignores cancelled requests
   await expect.poll(async () => !(await canvas.screenshot()).equals(before)).toBeTruthy();
   await page.getByRole('button', { name: 'Selecionar para orçamento', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Remover do orçamento', exact: true })).toBeVisible();
-  const sample = page.getByLabel('Expositor · todos os nove materiais');
+  const sample = page.getByLabel('Material', { exact: true });
   await sample.selectOption('classic-white-deco');
   await expect(status).toContainText('Classic White Deco: Face local auditada carregada e exibida.');
   gate = new Promise<void>(resolve => { release = resolve; });
@@ -39,7 +56,7 @@ test('texture failure reports procedural fallback and ignores cancelled requests
   await expect.poll(() => requests).toBe(2);
   await expect(status).toContainText('Monte Saint Michez Fendi: Carregando textura');
   await sample.selectOption('savoy');
-  await expect(status).toContainText('Savoy: Padrão procedural ilustrativo em uso');
+  await expect(status).toContainText('Savoy: Face local auditada carregada e exibida.');
   release();
   await page.waitForTimeout(300);
   await expect(status).not.toContainText('Monte Saint Michez Fendi');
@@ -48,14 +65,16 @@ test('texture failure reports procedural fallback and ignores cancelled requests
   expect(errors).toEqual([]);
 });
 
-test('nine sample deep links, focus and reduced motion', async ({ page }) => {
+test('nine surface materials, deep links, focus and reduced motion', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/simulador?produto=savoy');
-  await expect(page.getByLabel('Expositor · todos os nove materiais')).toHaveValue('savoy');
+  await expect(page.getByLabel('Material', { exact: true })).toHaveValue('savoy');
   await expect(page.getByRole('heading', { name: 'Savoy', exact: true })).toBeVisible();
-  await expect(page.getByLabel('Material confirmado')).toHaveValue('');
-  await expect(page.getByLabel('Expositor · todos os nove materiais').locator('option')).toHaveCount(10);
+  await expect(page.getByLabel('Material', { exact: true }).locator('option')).toHaveCount(10);
+  await page.getByLabel('Aplicação').selectOption('floor');
+  await expect(page.getByLabel('Material', { exact: true })).toHaveValue('');
+  await expect(page.getByLabel('Material', { exact: true }).locator('option')).toHaveCount(10);
   const start = page.getByRole('button', { name: 'Iniciar visualização 3D' });
   await start.focus();
   await page.keyboard.press('Tab');

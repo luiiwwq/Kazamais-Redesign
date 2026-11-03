@@ -78,6 +78,14 @@ export function Catalog() {
           })}
         </tr>)}</tbody>
       </table></div>
+      <h3>Dados publicados pela Kazamais</h3>
+      <p className="caption">Valores da fonte, sem recálculo. Não substituem indicação técnica. Consulte conflitos nas fichas.</p>
+      {(['technicalDetails', 'packagingDetails'] as const).map(group => <div className="table-scroll" key={group}><table>
+        <caption>{group === 'technicalDetails' ? 'Ficha técnica publicada' : 'Embalagem publicada'}</caption>
+        <thead><tr><th scope="col">Campo</th>{compare.map(slug => <th scope="col" key={slug}>{products.find(p => p.slug === slug)!.name}</th>)}</tr></thead>
+        <tbody>{[...new Set(compare.flatMap(slug => products.find(p => p.slug === slug)![group]?.map(row => row.label) ?? []))].map(label => <tr key={label}><th scope="row">{label}</th>{compare.map(slug => <td key={slug}>{products.find(p => p.slug === slug)![group]?.find(row => row.label === label)?.value ?? 'Não publicado'}</td>)}</tr>)}</tbody>
+      </table></div>)}
+      {compare.map(slug => { const p = products.find(p => p.slug === slug)!; return <p key={slug}><Link href={`/revestimentos/${slug}`}>{p.name}: fontes e conflitos</Link>{p.fieldNotes?.map(note => <span key={note}> {note}</span>)}</p>; })}
     </dialog>
   </>;
 }

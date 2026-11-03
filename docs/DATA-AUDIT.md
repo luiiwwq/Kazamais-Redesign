@@ -1,5 +1,33 @@
 # Auditoria de dados Kazamais
 
+## Refinamento final — faces oficiais incorporadas
+
+As pendências de faces da rodada anterior foram resolvidas por downloads reais. `scripts/research-faces.cjs` leu HTML das fichas Madero 2481A e Monterrey 108009A: galerias com links diretos maiores e `data-download-url`, sem srcset de alta resolução. Os endpoints de ZIP publicados foram consultados:
+
+| URL lida e baixada | Conteúdo auditado | Uso |
+|---|---|---|
+| https://www.villagres.com.br/2481A/get/downloads | 16 JPEGs de faces, 147×600 | 16 faces locais de Madero |
+| https://www.villagres.com.br/108009A/get/downloads | 4 JPEGs 510×510; primeiro/quarto SHA-256 iguais | 3 faces únicas de Monterrey |
+| https://www.villagres.com.br/820011A/get/downloads | 8 JPEGs 343×600 | 8 faces de Savoy |
+
+Savoy: buscas `PT/busca?search=Savoy` e `?search=820011` redirecionaram à home; `820011/get/downloads` retornou 404. A rota `820011A/get/downloads`, testada seguindo o padrão dos outros códigos, respondeu 200/application-zip. Inclui `4e5a6dcf8e77208b99b525223615a4bd.jpg`, também presente na publicação Kazamais da referência 820011. A face `eb55a72b82bf35db3c3cffebc6529b53.jpg` foi buscada e inspecionada diretamente: mármore claro, veios finos, sem cenário. Toda a contact sheet das oito faces também foi inspecionada. Isso valida os assets do estudo, não resolve automaticamente acabamento/aplicação técnica.
+
+As 28 entradas foram registradas em `docs/evidence/official-faces.json` com URL, nome original, dimensões, SHA-256 original e local. Cópias JPEG quality 90, sem ampliação, em `src/assets/images/audited/*-official-*.jpg`; uma duplicata de Monterrey mantida como evidência, não importada no render. `official-faces.ts` importa 27 imagens distintas exclusivamente no chunk lazy da cena. Contact sheets de todos os arquivos inspecionadas: faces isoladas, nenhum ambiente/rejunte/banner. Não há arquivos maiores dentro desses downloads; limites de resolução publicados na interface. Sem afirmação de PBR medido ou licença independente de terceiros.
+
+Reprodução: `node scripts/official-faces.cjs` audita em memória; `--write` recria apenas os arquivos controlados e manifest/contact sheets. ZIPs têm limites de tamanho e caminhos internos nunca são usados para escrita. Nenhum código remoto executado.
+
+## Revisão atual — tabelas publicadas, 2026-11-03
+
+As nove URLs `/blog/produto/` listadas na tabela abaixo foram novamente lidas integralmente com webfetch nesta revisão. Transcritas todas as linhas de Descrição e Embalagem em `src/data/published.ts`, expostas via `Product.technicalDetails`, `packagingDetails` e `fieldNotes`. Classic não publica tabela Embalagem: ausência explicitada, não preenchida por estimativa. Logos identificam fabricantes; Diamond preserva Ceramicasa publicado apesar do slug Villagres.
+
+Esta decisão substitui as omissões históricas abaixo: dados publicados não são descartados porque o fabricante não reconfirmou. Campos conciliados permanecem separados. Monte 73003: 11 linhas técnicas e 8 de embalagem, incluindo 65,65 de pallet, 3,02 m²/caixa e 20 caixas; inconsistência preservada com nota, sem cálculo corretivo. Artsy conserva pesos/pontuação originais; Minimalismo conserva 1 m² e duas peças. Classic conserva espessura publicada de 10 mm, explicitando conflito oficial de 11 mm e formato 75 versus 72 cm.
+
+Busca real no fabricante nesta revisão: `https://www.villagres.com.br/PT/busca?search=Madero`, `?search=Monterrey` e `?search=Savoy`. Madero retornou referência 2481 e Monterrey 108009; Savoy retornou conteúdo genérico sem ficha. Imagens buscadas e inspecionadas: `https://www.villagres.com.br/storage/4bb3aad3a72d2ef9d205b95c52105e89.jpg` (face madeira estreita, miniatura 64×261) e `https://www.villagres.com.br/storage/a2415589c59927a9debf242509408f68.jpg` (face cimento, 261×261). São faces, não ambientes, mas não alta resolução. Não incorporadas nesta revisão; pesquisa de arquivos maiores/múltiplas faces permanece pendente. Procedurais continuam identificados.
+
+Aplicação livre no simulador não altera `surfaces` nem autoriza instalação. Todos nove recebem piso/parede no estudo; Classic piso exibe aviso específico.
+
+## Histórico anterior (omissões de tabelas superadas pela revisão acima)
+
 Consulta: 2026-11-03. Escopo exclusivo: `src/data/**` e este documento.
 
 ## Método e contrato

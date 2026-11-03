@@ -1,56 +1,31 @@
-# Simulador de materiais
+# Simulador — estado atual, 2026-11-03
 
-## Atualização: nove materiais e faces locais
+## Superfícies reais
+Sem expositor, pedestal ou ocultação do mobiliário. O seletor Material contém nove produtos para piso e parede. Escolher altera diretamente a malha de piso (4,80 × 4,20 m) ou parede posterior (4,80 × 2,80 m), sem navegação nem remontagem do Canvas. Materiais e orientação são independentes. Laterais e mobiliário são cenográficos.
 
-Este bloco substitui os detalhes antigos conflitantes abaixo (mantidos como histórico de validação).
+`surfaces` continua sendo indicação técnica, não restrição do estudo visual. Classic White Deco em piso mostra aviso de indicação somente para parede; demais usos não verificados mostram aviso contextual. Nenhuma indicação foi inventada.
 
-- Todos os nove produtos podem ser selecionados no controle **Expositor**. Troca realmente a face/padrão visível no Canvas; não atribui piso/parede. Deep links sem aplicação confirmada abrem nesse modo. Formato proporcional, escala de apresentação ajustada, sem alegação de espessura real. Mobiliário é ocultado no modo expositor para não intersectar o pedestal.
-- Aplicações confirmadas continuam sendo dois pisos/três paredes, sem alteração de contratos técnicos. Slug inexistente gera aviso. Reset também oculta expositor. Orçamento e ficha acompanham o produto efetivamente selecionado.
-- Seis faces do mapa auditado: Monte, Artsy, Santa Diamond, Minimalismo, Thor e Classic. Importadas localmente, nunca imagens `room`; canvas até 2048² limitado à resolução original. Santa Diamond tem apenas 450²: não há detalhe de alta resolução inventado. Faces incluem iluminação fotografada, não são PBR calibrado; relevo não é geometria medida.
-- Madero, Monterrey e Savoy não têm face isolada identificada no contrato: padrões originais procedurais de 512², distintos por aparência. Foto ambientada é referência HTML, nunca textura. Falha de carregamento de face mantém padrão procedural. Color maps sRGB, anisotropia limitada à GPU e a 8, repetição/orientação por instância, descarte no cleanup e proteção contra callback após unmount.
-- Ambiente procedural local de iluminação capturado uma vez em 64², luz direcional/sombras existentes, mobiliário com cantos arredondados, almofadas com sheen, pés e elemento vegetal. Sem HDR remoto, física, segundo renderer ou pós-processamento. Não constitui fotorrealismo/fotometria. Mantém demand loop e pausas; não promete FPS ou economia medida.
-- Resultados atuais em UPDATE-QA.md. Registros abaixo são da implementação anterior.
+Deep links usam a primeira superfície técnica quando existe, senão parede. Slug desconhecido gera aviso. Reset limpa os dois materiais, orientações, câmera, rotação e luz, sem apagar orçamento. URL não é alterada pelo reset.
 
-## Escopo e entrada
+## Texturas e escala
+Seis faces locais: Monte, Artsy, Santa Diamond, Minimalismo, Thor e Classic. Somente imagens classificadas `tile`, nunca `room`. Canvas limitado à resolução original e a 2048²; Santa Diamond continua limitado a 450². Não são albedo/PBR medidos e podem conter iluminação fotografada.
 
-Implementação isolada em `src/components/simulator/`; export default em `Simulator.tsx`. Reutiliza a página `/simulador`, os dados e `useSelection`, sem alterar contratos, dependências ou estilos globais.
+Madero, Monterrey e Savoy agora usam **faces oficiais locais** extraídas dos ZIPs do fabricante: 16 de 147×600 para Madero, 3 únicas de 510×510 para Monterrey (a quarta é duplicada byte a byte), 8 de 343×600 para Savoy. Os ZIPs não oferecem resolução maior que essas imagens. Contact sheets inspecionadas, manifest com hashes em `docs/evidence/official-faces.json`. Não são fotos de ambiente, não são apresentadas como alta resolução.
 
-Deep links: `/simulador?produto=classic-white-deco` aplica à parede; `/simulador?produto=madero-jatoba-externo` aplica ao piso (primeira superfície confirmada na base). Um slug inexistente, sem superfície confirmada ou sem dimensões gera explicação; não é aplicado automaticamente. Alterações de material são locais, sem reload ou remontagem do Canvas. O reset limpa materiais e orientações de ambas as superfícies, câmera e luz, mas não limpa o orçamento nem altera a URL; abrir novamente o deep link reaplica o produto.
+Atlas distribui faces em ordem determinística não sequencial, mantendo tamanho de peça e junta. Máximo 2048 por eixo; não amplia resolução da face. Rotação troca eixos do atlas e gira cada peça, sem alterar a escala. Color maps sRGB, mapas de dados NoColorSpace. Bump/roughness artísticos de até 512 por eixo derivados da luminância, com amplitude restrita: não são relevo ou PBR medidos. Todos os mapas próprios são descartados na troca/desmontagem.
 
-## Fidelidade e limites dos dados
+Fallback procedural aprimorado: fibra/marcas de serra e nós discretos na madeira, cimento com três escalas de manchas/poros, mármore com caminhos irregulares e variação por peça. É provisório durante carregamento e explicitamente identificado em caso de falha. Nenhuma face faltante produz falso sucesso: o atlas oficial só é apresentado após todas carregarem.
 
-- A base oficial em `src/data/index.ts` oferece **dois pisos e três paredes**: Madero Jatobá, 24,5 × 100 cm, piso/parede; Monterrey Cement, 108 × 108 cm, piso/parede; Classic White Deco, 72 × 72 cm, somente parede.
-- Ambas as superfícies alternam independentemente entre base cenográfica e produtos compatíveis. Listagens e contagens derivam de `surfaces` e requerem dimensões; Classic não é oferecido para piso.
-- Formatos comerciais oficiais são usados, não dimensões de fabricação. Para Madero, 24,5 × 100 cm não deve ser confundido com 245 × 995 mm de fabricação. Aplicação confirmada não elimina restrições de uso, acabamento e instalação descritas na ficha.
-- Cena em metros: sala 4,80 × 4,20 m, altura 2,80 m. Parede posterior inteira aplicada; laterais/janela são cenográficas. A abertura lateral tem 2,00 × 1,40 m e peitoril a 0,90 m. Sofá com largura aproximada de 2,25 m e mesa de diâmetro 1,30 m fornecem referência de escala.
-- Paginação reta: UVs dividem largura/altura da superfície pelo formato comercial em metros **mais junta ilustrativa de 0,003 m** em cada eixo. Madero a 0° no piso repete `4,80/(0,245+0,003)` por `4,20/(1+0,003)`; a 90° troca os denominadores. Na parede a altura é 2,80 m. A espessura visual da junta é calculada separadamente por eixo, evitando distorção em peças retangulares. Bordas recortadas não são cálculo executivo de paginação, compra ou perdas.
-- Texturas procedurais locais de 512² pixels, sRGB, sem fotografias ou solicitações externas. Madeira: veios longitudinais marrons; cimento: manchas e granulação cinza de baixa amplitude com semente determinística; relevo ilustrativo: desenho direcional claro com gradientes, sem displacement, normal map ou geometria exata de relevo. Cor não é uma cor técnica verificada. Junta ilustrativa de 3 mm não é especificação de instalação.
-- Materiais de tecido, madeira, cerâmica e bases cenográficas são diferenciados por cor e rugosidade, mas não constituem simulação fotométrica. Luz quente/neutra é estudo visual, sem alegação de temperatura calibrada.
-- Orientação independente por superfície. Rotação 90° troca largura/comprimento de peças retangulares e gira o desenho; peças quadradas mantêm modulação. No piso, o comprimento a 0° acompanha a profundidade da sala. Seleção de outra superfície não altera o material ou orientação da anterior. Novos produtos exigem revisão visual, mesmo com elegibilidade derivada dos dados.
+Junta lida de `technicalDetails`: 2 mm Monte/Madero/Monterrey/Savoy/Classic, 1,5 mm Artsy/Thor, 3 mm Diamond, seca Minimalismo. Texto publicado não é recomendação de assentamento. Ausência usa 3 mm ilustrativos. UVs usam formato em metros mais junta; rotação troca eixos e gira desenho. Sem calculadora, perdas ou geometria medida de relevo.
 
-## Interação, recursos e acessibilidade
+Ambiente local 64² capturado uma vez; preenchimento hemisférico reduzido e neutro, painel luminoso orientado à janela e luz direcional recalibrada. Sombra 1024² com frustum mais justo, bias menor e filtragem PCF existente; antialias do renderer preservado. ContactShadows 256², blur 2,4, opacidade 0,24, `frames=1`: contato do mobiliário estático, não passagem contínua. Sem novo renderer, física ou pós-processamento. Não constitui simulação fotométrica. Limites: texturas fotografadas podem ter iluminação embutida, ausência de ambiente real medido, repetição do atlas ainda existe em áreas extensas.
 
-- Poster SVG estático embutido e local antes do clique; importação lazy de Scene/Canvas somente após iniciar.
-- Presets ambiente, parede e piso; rotação limitada a ±25° em slider HTML acessível por teclado. Sem OrbitControls, autorotate, captura de scroll ou gesto obrigatório.
-- Sem animações contínuas ou transições de câmera: alterações discretas também respeitam usuários com reduced-motion. Estilos globais já suprimem transições nesse modo.
-- `frameloop="demand"`; `never` fora da viewport ou com documento oculto. IntersectionObserver e eventos removidos ao desmontar.
-- DPR entre 1 e 1,5; reduz a 1 após quatro submissões de render que excedem 28 ms. É uma heurística de custo **CPU de submissão**, não medição GPU/FPS, e não há subida automática. Sem pós-processamento, física ou dependência remota de HDR.
-- Materiais/geometrias declarativos pertencem ao R3F. CanvasTexture criada em efeito e descartada no cleanup, incluindo troca de produto/orientação. Apenas uma luz projeta sombras de 1024².
-- Após o clique, um probe WebGL2 detecta indisponibilidade antes de carregar Three; o contexto de teste é liberado imediatamente. Error boundary cobre falha do carregamento/render React. `webglcontextlost` desmonta a cena e mostra poster com tentativa manual; Canvas também inclui fallback. Seleção e orçamento são HTML independentes da cena. Tentativa manual preserva os materiais atuais.
-- Integração de orçamento usa `has`, `toggle`, `ready`, `storageError`. Não envia pedidos nem inventa preços. Persistência e limitações são as do provider existente.
+## Recursos e falhas
+Lazy após clique, poster SVG, probe WebGL2 liberado imediatamente, ErrorBoundary, fallback de contexto perdido e tentativa manual. Status por piso/parede e slug/orientação: loading/ready/error/procedural; callback cancelado não sobrescreve seleção nova. Falha de face mantém procedural explicitamente identificado.
 
-## Verificações executadas
+Color map sRGB, anisotropia até 8 ou limite GPU, CanvasTexture própria descartada no cleanup. Demand loop; never fora da viewport/documento oculto. DPR 1–1,5, reduz a 1 após quatro submissões acima de 28 ms (heurística CPU, não benchmark GPU). Câmera discreta, sem animação contínua; reduced-motion global preservado. Teclado acessa controles HTML; fallback não impede orçamento.
 
-- `npm run typecheck`: passou após esta atualização.
-- `npm run build`: passou, incluindo geração estática de `/simulador`.
-- `node --experimental-strip-types src/components/simulator/smoke.cjs`: passou em Chromium headless com servidor de produção local na porta 3217. Teste encerra navegador/servidor. Node emitiu aviso `MODULE_TYPELESS_PACKAGE_JSON` ao importar o helper TypeScript; não alteramos o manifesto fora do escopo para suprimi-lo.
-- Testes numéricos do helper `materials.ts`: três formatos, duas superfícies e duas orientações; verificam pitches comerciais + junta e repetições em escala. Verificam também as três famílias procedurais.
-- Desktop **1440 × 1000**, tablet **820 × 1180**, mobile **390 × 844**: três materiais de parede, dois de piso, independência de material/orientação, todos os presets, luz quente/neutra, limites de rotação por teclado, reset de ambas as superfícies/orientações/câmera/luz, orçamento preservado e ausência de overflow horizontal.
-- Capturas do Canvas em memória verificam mudança de pixels entre materiais, orientação da madeira, câmeras e luzes. Contador de navegação, marcador no documento e identidade do elemento Canvas comprovam troca sem reload/navegação/remontagem. Isso não equivale a uma revisão estética por imagem de referência.
-- Perda de contexto acionada pela extensão real `WEBGL_lose_context` nos três tamanhos: fallback, troca de material em fallback, recuperação manual e navegação à ficha correta passaram.
-- WebGL indisponível simulado com `getContext` retornando null somente para solicitações GL: poster/fallback sem Canvas, nova tentativa, troca de material e orçamento funcionaram. Deep links de parede e piso também verificados.
-- Console e pageerror: nenhum erro nas execuções de navegador.
+## Verificação
+Smoke de produção: nove materiais em ambas as superfícies, diferença de capturas do Canvas, identidade do Canvas/documento, orientação independente, luz/câmera, reset, orçamento, perda de contexto real via extensão e retry. Desktop 1440×1000, tablet 820×1180, mobile 390×844. Indisponibilidade WebGL simulada separadamente. Resultados finais e limites em UPDATE-QA.md.
 
-## Pendente / não comprovado
-
-Não executados: Safari/Firefox, dispositivo móvel físico, leitura com leitor de tela, falha física do driver GPU, medição de memória GPU, benchmark térmico e auditoria visual fotométrica. A indisponibilidade é simulada no contrato do navegador e a perda de contexto usa extensão de teste, não falha física de GPU. Pausa por visibilidade e heurística DPR foram implementadas, mas não instrumentadas pelo smoke. Capturas verificam mudanças de pixels, não fidelidade ao fabricante; cores, variações de faces, acabamento, relevo e assentamento continuam ilustrativos.
+Refinamento verificado com seis pares antes/depois de Madero/Monterrey/Savoy em 1440 e 390, câmera Ambiente/0°, mesma luz neutra, ambos piso/parede selecionados. Todos inspecionados. Bump/roughness elevam o número de texturas por superfície de uma para três; mapas auxiliares limitados a 512, cor a 2048. Contato tem custo de render target/depth/blur apenas na montagem. Sem benchmark GPU ou promessa de FPS; DPR/demand/lazy/fallback preservados e smoke aprovado após mudança.
